@@ -18,81 +18,83 @@ THEN the password is either displayed in an alert or written to the page
 
 /* setup the initial arrays */
 var alphabet_lc = Array.from("abcdefghijklmnopqrstuvwxyz");
-var alphabet_up = alphabet_lc.map(element => {
+var alphabet_uc = alphabet_lc.map(element => {
   return element.toUpperCase();
 });
 var numbers = [...Array(10).keys()]
 var specialChars = Array.from("!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~");
 
-/* ask user */
-var lengthStr = prompt("What length (from 8 to 128) do you want to use for the password?");
-var includeLowerStr = prompt("Include lowercase letters?");
-var includeUpperStr = prompt("Include uppercase letters?");
-var includeNumsStr = prompt("Include numbers?")
-var includeSpcCharsStr = prompt("Include special characters?")
-
-/* store values */
-var length = parseInt(lengthStr);
-var includeLower = includeLowerStr.toLowerCase() == "y";
-var includeUpper = includeUpperStr.toLowerCase() == "y";
-var includeNums = includeNumsStr.toLowerCase() == "y";
-var includeSpcChars = includeSpcCharsStr.toLowerCase() == "y";
-
-/* validate input */
-var gotValidNum = Number.isInteger(length) && length >= 8 && length <=128;
-var atLeastOneType = includeLower || includeUpper || includeNums || includeSpcChars;
 
 function generatePassword() {
+  /* ask user */
+  var lengthStr = prompt("What length (from 8 to 128) do you want to use for the password?");
+  var includeLowerStr = prompt("Include lowercase letters?");
+  var includeUpperStr = prompt("Include uppercase letters?");
+  var includeNumsStr = prompt("Include numbers?")
+  var includeSpcCharsStr = prompt("Include special characters?")
 
-  if (!gotValidNum) {
-    return "Invalid number. Please try again.";
-  }
-  
-  if (!atLeastOneType) {
-    return 'Please try again. At least one character type must be specified.'
-  }
+  /* store values */
+  var length = parseInt(lengthStr);
+  var includeLower = includeLowerStr.toLowerCase() == "y";
+  var includeUpper = includeUpperStr.toLowerCase() == "y";
+  var includeNums = includeNumsStr.toLowerCase() == "y";
+  var includeSpcChars = includeSpcCharsStr.toLowerCase() == "y";
 
-  var testStr = `got validNum: ${gotValidNum}, atLeastOneType: ${atLeastOneType}, length: ${length}, lower: ${includeLower}, upper: ${includeUpper}, nums: ${includeNums}, special: ${includeSpcChars}`;
+  /* validate input */
+  var gotValidNum = Number.isInteger(length) && length >= 8 && length <=128;
+  var atLeastOneType = includeLower || includeUpper || includeNums || includeSpcChars;
 
-  var password = '';
-
-  while(password.length != length) {
-    if (includeLower) {
-      // loop through alphabet_lc
-      // get at least one character
+    if (!gotValidNum) {
+      return "Invalid number. Please try again.";
+    }
+    
+    if (!atLeastOneType) {
+      return 'Please try again. At least one character type must be specified.'
     }
 
-    if (includeUpper) {
-      // loop through alphabet_up
-      // get at least one character
-      // update password (look into stringbuilder)
-  }
+    var testStr = `got validNum: ${gotValidNum}, atLeastOneType: ${atLeastOneType}, length: ${length}, lower: ${includeLower}, upper: ${includeUpper}, nums: ${includeNums}, special: ${includeSpcChars}`;
 
-  if (includeNums) {
-    // loop through numbers
-    // get at least one character
-    // update password (look into stringbuilder)
+    var password = '';
 
-  }
+    while(password.length != length) {
+      if (includeLower) {
+        // loop through alphabet_lc
+        // randomly get at least one character
+        var lcVal = alphabet_lc[Math.floor(Math.random() * alphabet_lc.length)];
 
-  if (includeSpcChars) {
-    // loop through specialChars
-    // get at least one character
-    // update password (look into stringbuilder)
-  }
+      }
 
-  //scramble all the letters in password. return password.
-  // const shuffled_pw = str => [...str].sort(()=>Math.random()-.5).join('');
-  //   document.write(shuffle(password));
-    
-  return testStr;
+      if (includeUpper) {
+        // loop through alphabet_up
+        // randomly get at least one character
+        // update password (look into stringbuilder)
+      }
 
-  }
+      if (includeNums) {
+        // loop through numbers
+        // randomly get at least one character
+        // update password (look into stringbuilder)
+
+      }
+
+      if (includeSpcChars) {
+        // loop through specialChars
+        // randomly get at least one character
+        // update password (look into stringbuilder)
+      }
+
+      //scramble all the letters in password. return password.
+      // const shuffled_pw = str => [...str].sort(()=>Math.random()-.5).join('');
+      //   document.write(shuffle(password));
+        
+      return testStr;
+
+      }
 }
 
 
 // Write password to the #password input
-function writePassword() {
+var createTaskHandler = function() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
@@ -103,4 +105,4 @@ function writePassword() {
 var generateBtn = document.querySelector("#generate");
 
 // Add event listener to generate button
-generateBtn.addEventListener("click", writePassword());
+generateBtn.addEventListener("click", createTaskHandler);
