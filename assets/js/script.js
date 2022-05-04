@@ -7,6 +7,7 @@ var numbers = [...Array(10).keys()];
 var specialChars = Array.from("!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~");
 var pw_length, includeLower, includeUpper, includeNums, includeSpcChars, lengthStr;
 
+/* helper functions */
 function gotValidLength(length_Str) {
 
   if(length_Str === null) {
@@ -49,7 +50,6 @@ function gotValidCharTypeResponse(response) {
   return true;
 }
 
-/* helper functions */
 var gotValidResponse = function askUser_ConfirmGotValidResponses() {
 
   lengthStr = prompt("What length (from 8 to 128) do you want to use for the password?");
