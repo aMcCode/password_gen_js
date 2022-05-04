@@ -5,10 +5,52 @@ var alphabet_uc = alphabet_lc.map(element => {
 });
 var numbers = [...Array(10).keys()];
 var specialChars = Array.from("!\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~");
-var length, includeLower, includeUpper, includeNums, includeSpcChars, lengthStr;
+var pw_length, includeLower, includeUpper, includeNums, includeSpcChars, lengthStr;
+
+function gotValidLength(length_Str) {
+
+  if(length_Str === null) {
+    alert("Program cancelled. Thank you.");
+    return false;
+  }
+
+  pw_length = parseInt(length_Str);
+  var lengthIsInt = Number.isInteger(pw_length);
+  var gotValidNum = lengthIsInt && pw_length >= 8 && pw_length <=128;
+
+  if(!lengthIsInt)  {
+    if (length_Str.trim() === '')
+      length_Str = '<empty>'
+    alert(`${length_Str} is not a valid number. Please start over by clicking the "Generate Password" button again.`);
+    return false;
+  }
+  if (!gotValidNum) {
+    alert(`You entered ${pw_length}. Passwords are required to be 8 to 128 charcters long. Please start over by clicking the "Generate Password" button again.`);
+    return false;
+  }
+
+  return true;
+}
+
+function gotValidCharTypeResponse(response) {
+  if(response === null) {
+    alert("Program cancelled. Thank you.");
+    return false;
+  }
+
+  var got_y_or_n = response.toLowerCase() === 'y' || response.toLowerCase() === 'n';
+  if(!got_y_or_n) {
+    if (response.trim() === '')
+      response = '<empty'
+    alert(`${response} is not one of the expected values ('y' or 'n'). Please start over by clicking the "Generate Password" button again.`);
+      return false;
+  }
+
+  return true;
+}
 
 /* helper functions */
-function askUser_ConfirmGotValidResponses() {
+var gotValidResponse = function askUser_ConfirmGotValidResponses() {
 
   lengthStr = prompt("What length (from 8 to 128) do you want to use for the password?");
   if(!gotValidLength(lengthStr))
@@ -16,7 +58,7 @@ function askUser_ConfirmGotValidResponses() {
 
   var includeLowerStr = prompt("Include lowercase letters? Enter 'y' or 'n'.");
   if(!gotValidCharTypeResponse(includeLowerStr))
-    return false;
+    return false; 
   var includeUpperStr = prompt("Include uppercase letters? Enter 'y' or 'n'.");
   if(!gotValidCharTypeResponse(includeUpperStr))
     return false;
@@ -42,55 +84,17 @@ function askUser_ConfirmGotValidResponses() {
   return true;
 }
 
-function gotValidLength(length_Str) {
-
-  if(length_Str === null) {
-    alert("Program cancelled. Thank you.");
-    return false;
-  }
-
-  length = parseInt(lengthStr);
-  var lengthIsInt = Number.isInteger(length);
-  var gotValidNum = lengthIsInt && length >= 8 && length <=128;
-
-  if(!lengthIsInt)  {
-    alert(`${lengthStr} is not a valid number. Please start over by clicking the "Generate Password" button again.`);
-    return false;
-  }
-  if (!gotValidNum) {
-    alert(`You entered ${length}. Passwords are required to be 8 to 128 charcters long. Please start over by clicking the "Generate Password" button again.`);
-    return false;
-  }
-
-  return true;
-}
-
-function gotValidCharTypeResponse(response) {
-  if(response === null) {
-    alert("Program cancelled. Thank you.");
-    return false;
-  }
-
-  var got_y_or_n = response.toLowerCase() === 'y' || response.toLowerCase() === 'n';
-  if(!got_y_or_n) {
-    alert(`${response} is not one of the expected values ('y' or 'n'). Please start over by clicking the "Generate Password" button again.`);
-      return false;
-  }
-
-      return true;
-}
-
 /* main function */
 function generatePassword() {
 
   var password = '';
 
-  if(!askUser_ConfirmGotValidResponses())
-    return null;
+  if(!gotValidResponse())
+    return 'no password generated';
 
-  while(password.length != length) {
+  while (password.length < pw_length) {
     if (includeLower) {
-      password += alphabet_lc[Math.floor(Math.random() * alphabet_lc.length)];
+      password += alphabet_lc[Math.floor(Math.random() * alphabet_lc.length)];  
     }
     if (includeUpper) {
       password += alphabet_uc[Math.floor(Math.random() * alphabet_uc.length)];
@@ -103,7 +107,7 @@ function generatePassword() {
     } 
   }
 
-  // scramble all the letters in password.
+  //scramble the password
   var arr = password.split(''); 
   arr.sort(function() {
     return 0.5 - Math.random();
