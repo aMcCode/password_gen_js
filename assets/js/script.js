@@ -15,7 +15,9 @@ function gotValidLength(length_Str) {
     return false;
   }
 
-  pw_length = parseInt(length_Str);
+  /* seems like this is the best option since parseInt
+      returned first char as number */
+  pw_length = Number(length_Str);
   var lengthIsInt = Number.isInteger(pw_length);
   var gotValidNum = lengthIsInt && pw_length >= 8 && pw_length <=128;
 
